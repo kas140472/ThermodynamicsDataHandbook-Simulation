@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thermodynamics Data Handbook</title>
+    <link rel="stylesheet" href="css/MOMstyle.css" />
+    <script src='js/jquery.min.js'></script>
+    <script src='js/jquery-ui.min.js'></script>
+    <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+</head>
+
+<!--<body onload="body();">-->
+<body>
+<!-- Defining Container for Simulation -->
+<noscript>
+    The simulation requires JavaScript to be enabled.
+</noscript>
+
+<div id="container">
+    <div id="simtitle">Thermodynamics Data Handbook</div>
+    <!-- Region for simulation display -->
+    <div id="scroll_div" style="max-height:390px; max-width:590px;overflow: scroll;">
+<!--        <canvas id="simscreen" height="1150px" width="1250px" style="z-index: 10">-->
+        <canvas id="simscreen" height="1800px" width="1250px" style="z-index: 10">
+            <img id="image1" width="900px" height="900px" src="images/superheat.png" style="z-index: -1">
+            <img id="image2" width="1000px" height="900px" src="images/graph.png" style="z-index: -2">
+            <img id="image3" width="1000px" height="900px" src="images/temp.png" style="z-index: -3"   >
+        </canvas>
+    </div>
+    <div style="width:200px;"></div>
+
+    <div id="titleincanvas"></div>
+    <!-- Region for comment / question prompts -->
+
+    <div id="commentboxleft">
+        <p id="p1" style="line-height:0"></p>
+        <p id="p2" style="line-height:0"></p>
+        <p id="p12" style="line-height:0"></p>
+        <p id="p13" style="line-height:0"></p>
+    </div>
+
+    <div id="commentboxmiddle">
+        <p id="p3" style="line-height:0"></p>
+        <p id="p4" style="line-height:0"></p>
+        <p id="p5" style="line-height:0"></p>
+        <p id="p11" style="line-height:0"></p>
+<!--        <p id="p4" style="line-height:0"></p>-->
+<!--        <p id="p5" style="line-height:0"></p>-->
+    </div>
+
+    <div id="commentboxright">
+<!--        <p id="p11" style="line-height:0"></p>-->
+        <p id="p22" style="line-height:0"></p>
+        <p id="p33" style="line-height:0"></p>
+        <p id="p44" style="line-height:0"></p>
+        <p id="p55" style="line-height:0"></p>
+    </div>
+
+    <div id="commentboxleft2">
+        <!--        <p id="p11" style="line-height:0"></p>-->
+        <p id="p71" style="line-height:0.5"></p>
+        <p id="p72" style="line-height:0.5"></p>
+        <p id="p73" style="line-height:0.5"></p>
+<!--        <p id="p55" style="line-height:0"></p>-->
+    </div>
+
+    <div id="commentboxright2">
+        <!--        <p id="p11" style="line-height:0"></p>-->
+        <p id="p74" style="line-height:0.5"></p>
+        <p id="p75" style="line-height:0.5"></p>
+        <p id="p76" style="line-height:0.5"></p>
+<!--        <p id="p55" style="line-height:0"></p>-->
+    </div>
+
+    <!-- DND-Title of region for variables display -->
+    <div id="vartitle">VARIABLES</div>
+    <!-- Region for Input parameters of simulation -->
+
+    <div id="variables">
+        <div class="variable">
+            <div class="varname"align="left">
+
+                <input name="featured_ad" value="1" type="radio" id="yes4" onclick="resetradio(this);enabled"><b>SATURATED WATER</b><br>
+                <div class="buttons" id="yes3">
+                    <div id="yes5"><input type="radio" name="ad_pack_id" value="blue" id="yes" onclick="setcheckbox();enabled"><b>Pressure (kPa)</b></div>
+
+                    <select id="psat" class="blue box" name="type"  onchange="check1(this.value);enabled" >
+                        <option value="select" disabled selected id="select1" enabled >select</option>
+                        <option value="1">15 kPa</option>
+                        <option value="2">375 kPa</option>
+                        <option value="3">700 kPa</option>
+                        <option value="4">1000 kPa</option>
+                        <option value="5">13000 kPa</option>
+                        <option value="6">22064 kPa</option>
+                    </select>
+                    <br>
+                    <div class="varname">
+                        <div id="yes6"><input type="radio" name="ad_pack_id" value="white" id="yes2"  onclick="setcheckboxs();enabled"><b>Temperature (<sup>o</sup>C)</b><br></div>
+
+                        <select id="vsat" class="white box" name="type"  onchange="check2(this.value); enabled">
+                            <!--                            <option value="select"></option>-->
+                            <option value="select" disabled selected id="select2" enabled>select</option>
+                            <option value="1">0.01</option>
+                            <option value="2">50</option>
+                            <option value="3">120</option>
+                            <option value="4">200</option>
+                            <option value="5">275</option>
+                            <option value="6">373.95</option>
+                        </select>
+                    </div>
+                    <br>
+                </div>
+                <br>
+                <div class="varname">
+                    <input name="featured_ad" value="1" type="radio" onclick="resetradio1(this);disabled"><b>SUPERHEATED WATER</b>
+                    <br>
+                    <div class="buttons1" id="ok">
+                        
+                        <div id="ok1"  onclick="setcheckbox1();"><b>Pressure (MPa)</b><br></div>
+                        <div class="pressure">
+                            <select name="" id="pressure" onchange="displayTemperature(this.value)">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div id="ok2" onclick="setcheckbox1();"><b>Temperature (<sup>o</sup>C)</b><br>
+                        </div>
+                        <div class="temperature">
+                            <select name="" id="temperature" onchange="drawBox(this.value)">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                </b>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DND-Title of region for controls display -->
+<div id="ctrltitle">CONTROLS</div>
+<!-- Region for User controls of simulation -->
+<div id="controls" style="display: inline-block">
+    <img id="rotationbutton" onclick="location.reload();" src="images/bluecwdull.png" />
+    <div style="position:relative; left: 15px;top:-60px;">
+
+		<span class="tooltip" style="border-bottom:0px dotted ; color:black;text-align:justify; top: 2px; left: 42px">Instructions
+			<span class="tooltiptext" style="left: -60px; width: 200px">
+            If the highlighted area does not appear immediately on selecting the values, scroll up/down in order to view it.
+			</span>
+			</span>
+
+        <span class="tooltip" style="border-bottom:0px dotted ; color:black;top: 24px; text-align:justify">Abbreviations
+			<span class="tooltiptext" style="left: 0px;width: 390px">
+            Saturated Water<br><br>
+			T<sub>sat</sub> = Saturation Temperature (<sup>o</sup>C)<br>
+            P<sub>sat</sub> = Saturation Pressure (kPa)<br>
+            v<sub>f</sub> = Specific volume of saturated liquid state (m<sup>3</sup>/kg)<br>
+            v<sub>g</sub> = Specific volume of saturated vapor state (m<sup>3</sup>/kg)<br>
+            u<sub>f</sub> = Specific Internal energy of saturated liquid state (kJ/kg)<br>
+            u<sub>g</sub> = Specific Internal energy of saturated vapor state (kJ/kg)<br>
+            u<sub>fg</sub> = Change in Internal energy during evaporation (or condensation) (kJ/kg)<br>
+            h<sub>f</sub> = Specific Enthalpy of saturated liquid state (kJ/kg)<br>
+            h<sub>g</sub> = Specific Enthalpy of saturated vapor state (kJ/kg)<br>
+            h<sub>fg</sub> = Change in Enthalpy during evaporation (or condensation) (kJ/kg)<br>
+            s<sub>f</sub> = Specific Entropy of saturated liquid state (kJ/kg.K)<br>
+            s<sub>g</sub> = Specific Entropy of saturated vapor state (kJ/kg.K)<br>
+            s<sub>fg</sub> = Change in Entropy during evaporation (or condensation) (kJ/kg.K)<br><br>
+<!--			x = Quality or dryness fraction of the liquid-vapour mixture<br><br>-->
+            Superheated Water<br><br>
+            v = Specific volume (m<sup>3</sup>/kg)<br>
+            u = Specific Internal energy (kJ/kg)<br>
+            h = Specific Enthalpy (kJ/kg)<br>
+            s = Specific Entropy (kJ/kg.K)<br>
+			</span>
+			</span>
+
+        <span class="tooltip" style="border-bottom:0px dotted ; color:black;top: 24px; text-align:justify;left: 100px">Formulae
+			<span class="tooltiptext" style="left: -60px; width: 70px">
+            u<sub>fg</sub> = u<sub>g</sub>-u<sub>f</sub><br>
+            h<sub>fg</sub> = h<sub>g</sub>-h<sub>f</sub><br>
+            s<sub>fg</sub> = s<sub>g</sub>-s<sub>f</sub><br>
+			</span>
+			</span>
+    </div>
+</div>
+<!-- DND-Copyright display-->
+<div id="copyright" title="Developer : SOLVEr"> Copyright &copy; SOLVE The Virtual Lab @ NITK Surathkal </div>
+
+</div><!-- Container div close -->
+</body>
+<script type="text/javascript" >
+    var canvas = document.getElementById('simscreen');
+    var context = canvas.getContext('2d');
+    var img = document.getElementById("image2");
+    img.onload=function(){
+    context.drawImage(img, 0, 10);}
+
+    //SATURATED WATER
+    //pressure
+    function clear(){
+        document.getElementById("p1").innerHTML="";
+        document.getElementById("p2").innerHTML="";
+        document.getElementById("p3").innerHTML="";
+        document.getElementById("p4").innerHTML="";
+        document.getElementById("p5").innerHTML="";
+        document.getElementById("p11").innerHTML="";
+        document.getElementById("p22").innerHTML="";
+        document.getElementById("p33").innerHTML="";
+        document.getElementById("p44").innerHTML="";
+        document.getElementById("p55").innerHTML="";
+        document.getElementById("p71").innerHTML="";
+        document.getElementById("p72").innerHTML="";
+        document.getElementById("p73").innerHTML="";
+        document.getElementById("p74").innerHTML="";
+        document.getElementById("p75").innerHTML="";
+        document.getElementById("p76").innerHTML="";
+    }
+    function check1(value)
+    {
+        if(value == 1)
+        {
+            // alert("hi 1");
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -250);
+            document.getElementById("vsat").value = 1;
+            draw();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 15 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) = 53.97 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001014 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=10.020 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=225.93 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2448.0 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=225.94 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2598.3 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=0.7549 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=8.0071 kJ/kg.K";
+
+        }
+        else if(value == 2)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -842);
+            document.getElementById("vsat").value = 2;
+            draw1();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 375 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) = 141.30 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001081 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.49133 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=594.32 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2550.9 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=594.73 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2735.1 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=1.7526 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=6.9171 kJ/kg.K";
+
+        }
+        else if(value == 3)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -1043);
+            document.getElementById("vsat").value = 3;
+            draw2();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 700 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) = 164.95 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001108 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.27278 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=696.23 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2571.8 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=697.00 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2762.8 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=1.9918 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=6.7071 kJ/kg.K";
+
+        }
+        else if(value == 4)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -1202);
+            document.getElementById("vsat").value = 4;
+            draw2();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 1000 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) = 179.88 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001127 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.19436 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=761.39 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2582.8 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=762.51 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2777.1 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=2.1381 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=6.5850 kJ/kg.K";
+
+        }
+        else if(value == 5)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -1777);
+            document.getElementById("vsat").value = 5;
+            draw2();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 13000 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) = 330.85 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001566 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.012781 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=1511.0";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2496.6 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=1531.4 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2662.7 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=3.5606 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=5.4336 kJ/kg.K";
+
+        }
+        else if(value == 6)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image2");
+            context.drawImage(img, 5, -2040);
+            document.getElementById("vsat").value = 6;
+            draw2();
+            clear();
+            document.getElementById("p1").innerHTML="Pressure (P) = 22064 kPa";
+            document.getElementById("p2").innerHTML="Temperature (T<sub>sat</sub>) =373.95 <sup>o</sup>C";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.003106 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.003106 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=2015.7 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2015.7 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=2084.3 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2084.3 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=4.4070 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=4.4070 kJ/kg.K";
+
+        }
+    }
+    function draw() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        // Turn transparency on
+        context.rect(10, 245, 1230, 25);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove(225,240);
+    }
+    //p:320 v:160
+    function draw1() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        context.rect(10, 170, 1230, 25);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove(150,165);
+    }
+    //p:500 v:200
+    function draw2() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        context.rect(10, 165, 1230, 25);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove(145,160);
+    }
+    function displayTextAbove(rectTop,textTop){
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "black";
+        context.fillStyle = "yellow";
+        context.rect(10, rectTop, 1230, 20);
+        context.fill();
+        context.stroke();
+
+        context.fillStyle = "black";
+        // Turn transparency on
+        context.font="15px ariel";
+        context.fillText("P(kPa)",25, textTop);
+        context.fillText("Tsat(°C)",130, textTop);
+        context.fillText("vf",245, textTop);
+        context.fillText("vg",355, textTop);
+        context.fillText("uf",450, textTop);
+        context.fillText("ufg",550, textTop);
+        context.fillText("ug",650, textTop);
+        context.fillText("hf",750, textTop);
+        context.fillText("hfg",850, textTop);
+        context.fillText("hg",940, textTop);
+        context.fillText("sf",1025, textTop);
+        context.fillText("sfg",1110, textTop);
+        context.fillText("sg",1200, textTop);
+        context.stroke();
+    }
+
+
+    //TEMPERATURE
+    function check2(value)
+    {
+        if(value == 1)
+        {
+            // alert("hi 1");
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, 30);
+            document.getElementById("vsat").value = 1;
+            draw111();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 0.01 <sup>o</sup>C";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =0.6117 kPa ";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001000 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=206.00 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=0.000 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2374.9 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=0.001 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2500.9 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=0.0000 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=9.1556 kJ/kg.K";
+
+        }
+        else if(value == 2)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, -303);
+            document.getElementById("vsat").value = 2;
+            draw112();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 50<sup>o</sup>C ";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =12.352 kPa";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001012 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=12.026 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=209.33 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2442.7 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=209.34 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2591.3 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=0.7038 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=8.0748 kJ/kg.K";
+
+        }
+        else if(value == 3)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, -665);
+            document.getElementById("vsat").value = 3;
+            draw113();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 120 <sup>o</sup>C ";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =198.67 kPa";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001060 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.89133 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=503.60 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2528.9 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=503.81 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2706.0 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=1.5279 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=7.1292 kJ/kg.K";
+
+        }
+        else if(value == 4)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, -1078);
+            document.getElementById("vsat").value = 4;
+            draw113();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 200 <sup>o</sup>C ";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =1554.9 kPa";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001157 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.12721 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=850.46 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2594.2 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=852.26 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2792.0 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=2.3305 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=6.4302 kJ/kg.K";
+
+        }
+        else if(value == 5)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, -1466);
+            document.getElementById("vsat").value = 5;
+            draw113();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 275 <sup>o</sup>C ";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =5946.4 kPa";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.001317 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.032767 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=1202.9 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2590.3 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=1210.7 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2785.2 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=3.0221 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=5.8944 kJ/kg.K";
+
+        }
+        else if(value == 6)
+        {
+            var canvas = document.getElementById('simscreen');
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var img = document.getElementById("image3");
+            context.drawImage(img, 5, -1983);
+            document.getElementById("vsat").value = 6;
+            draw113();
+            clear();
+            document.getElementById("p1").innerHTML="Temperature (T) = 373.95 <sup>o</sup>C ";
+            document.getElementById("p2").innerHTML="Pressure (P<sub>sat</sub>) =22064 kPa";
+            document.getElementById("p3").innerHTML="v<sub>f</sub>=0.003106 m<sup>3</sup>/kg";
+            document.getElementById("p4").innerHTML="v<sub>g</sub>=0.003106 m<sup>3</sup>/kg";
+            document.getElementById("p5").innerHTML="u<sub>f</sub>=2015.7 kJ/kg";
+
+            document.getElementById("p11").innerHTML="u<sub>g</sub>=2015.7 kJ/kg";
+            document.getElementById("p22").innerHTML="h<sub>f</sub>=2084.3 kJ/kg";
+            document.getElementById("p33").innerHTML="h<sub>g</sub>=2084.3 kJ/kg";
+            document.getElementById("p44").innerHTML="s<sub>f</sub>=4.4070 kJ/kg.K";
+            document.getElementById("p55").innerHTML="s<sub>g</sub>=4.4070 kJ/kg.K";
+
+        }
+    }
+
+    function draw111() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        // Turn transparency on
+        context.rect(10, 240, 1220, 32);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove1(223,240);
+    }
+    //p:320 v:160
+    function draw112() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        context.rect(10, 170, 1220, 32);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove1(147,165);
+    }
+    //p:500 v:200
+    function draw113() {
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        context.rect(10, 167, 1220, 28);
+        context.stroke();
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        displayTextAbove1(140,157);
+    }
+    function displayTextAbove1(rectTop,textTop){
+        context.beginPath();
+        context.lineWidth = 3;
+        context.strokeStyle = "black";
+        context.fillStyle = "yellow";
+        context.rect(10, rectTop, 1220, 25);
+        context.fill();
+        context.stroke();
+
+        context.fillStyle = "black";
+        // Turn transparency on
+        context.font="15px ariel";
+        context.fillText("T(°C)",25, textTop);
+        context.fillText("Psat(kPa)",130, textTop);
+        context.fillText("vf",245, textTop);
+        context.fillText("vg",355, textTop);
+        context.fillText("uf",483, textTop);
+        context.fillText("ufg",570, textTop);
+        context.fillText("ug",650, textTop);
+        context.fillText("hf",770, textTop);
+        context.fillText("hfg",850, textTop);
+        context.fillText("hg",940, textTop);
+        context.fillText("sf",1025, textTop);
+        context.fillText("sfg",1110, textTop);
+        context.fillText("sg",1200, textTop);
+        context.stroke();
+    }
+
+
+
+    //superheated water
+    // Pressure
+    var dataSet = [
+
+        {
+            id: 1,
+            //temp:'100',
+            pressure: '0.3MPa',
+            color: "green",
+            temperatures: [
+                // { val:0},
+                {id: 1, val: 400, xcord: 110, ycord: 270, v1: 0.3, v2:400, v3:1.03155 , v4:2966.0 , v5:3275.5 ,v6:8.0347},
+                {id: 2, val: 600, xcord: 110, ycord: 323, v1: 0.3, v2:600, v3:1.34139 , v4:3301.6 , v5:3704.0 ,v6:8.5915},
+                {id: 3, val: 800, xcord: 110, ycord: 373, v1: 0.3, v2:800, v3:1.65004 , v4:3664.3 , v5:4159.3 ,v6:9.0605},
+                {id: 4, val: 1100, xcord: 110, ycord: 450, v1: 0.3, v2:1100, v3:2.11226 , v4:4259.4 , v5:4893.1 ,v6:9.6624},
+            ]
+        },
+        {
+            id: 2,
+            pressure: '1.8MPa',
+            color: "green",
+            temperatures: [
+                // { val:0},
+                {id: 1, val: 400, xcord: 100, ycord: 716, v1: 1.8, v2:400, v3:0.16849 , v4:2948.3 , v5:3251.6 ,v6:7.1814},
+                {id: 2, val: 600, xcord: 100, ycord: 765, v1: 1.8, v2:600, v3:0.22200 , v4:3292.7 , v5:3692.3 ,v6:7.7543},
+                {id: 3, val: 800, xcord: 100, ycord: 818, v1: 1.8, v2:800, v3:0.27426 , v4:3658.8 , v5:4152.4 ,v6:8.2284},
+                {id: 4, val: 1100, xcord: 100, ycord: 890, v1: 1.8, v2:1100, v3:0.35188 , v4:4256.2 , v5:4889.6 ,v6:8.8331},
+            ]
+        },
+        {
+            id: 3,
+            pressure: '7MPa',
+            color: "green",
+            temperatures: [
+                // {val:0},
+                {id: 1, val: 400, xcord: 100, ycord: 1100, v1: 7, v2:400, v3:0.039958 , v4:2879.5 , v5:3159.2 ,v6:6.4502},
+                {id: 2, val: 600, xcord: 100, ycord: 1200, v1: 7, v2:600, v3:0.055665 , v4:3261.0 , v5:3650.6 ,v6:7.0910},
+                {id: 3, val: 800, xcord: 100, ycord: 1250, v1: 7, v2:800, v3:0.069856 , v4:3639.5 , v5:4128.5 ,v6:7.5836},
+                {id: 4, val: 1100, xcord: 100, ycord: 1334, v1: 7, v2:1100, v3:0.090341 , v4:4245.0 , v5:4877.4 ,v6:8.1982},
+            ]
+        },
+        {
+            id: 4,
+            pressure: '30MPa',
+            color: "green",
+            temperatures: [
+                // { id:0,val:0},
+                {id: 1, val: 400, xcord: 100, ycord: 1490, v1:30, v2:400, v3:0.002798 , v4:2068.9 , v5:2152.8 ,v6:4.4758},
+                {id: 2, val: 600, xcord: 100, ycord: 1613, v1:30, v2:600, v3:0.011445 , v4:3103.4 , v5:3446.8 ,v6:6.2373},
+                {id: 3, val: 800, xcord: 100, ycord: 1690, v1:30, v2:800, v3:0.015628 , v4:3551.2 , v5:4020.0 ,v6:6.8301},
+                {id: 4, val: 1100, xcord: 100, ycord: 1765, v1:30, v2:1100, v3:0.020954 , v4:4195.2 , v5:4823.9 ,v6:7.4906},
+            ]
+        },
+    ];
+    var pressureIndexSet = 0;
+    var pressures = `<option value="">Select</option>`;
+    // var canvas = document.getElementById("canvas");
+    // var context = canvas.getContext("2d");
+    var canvas = document.getElementById('simscreen');
+    var context = canvas.getContext('2d');
+    var img = document.getElementById("image1");
+    context.drawImage(img, -380, -80);
+    context.beginPath();
+
+    dataSet.forEach(function(ele,index){
+        pressures+=`<option value=${ele.id}>${ele.pressure}</option>`
+    })
+    document.getElementById("pressure").innerHTML = pressures;
+
+    function displayTemperature(index){
+        var temperatures = "`<option value=${ele.id}>Select</option>`;";
+        dataSet[index-1].temperatures.forEach(function(ele,index){
+            temperatures+=`<option value=${ele.id}>${ele.val}</option>`
+        })
+        document.getElementById("temperature").innerHTML = temperatures;
+        pressureIndexSet = index-1;
+        // context.clearRect(0,0,500,500);
+        // context.clearRect(0, 0, canvas.width, canvas.height);
+
+    }
+
+
+    function clear(){
+        document.getElementById("p1").innerHTML="";
+        document.getElementById("p2").innerHTML="";
+        document.getElementById("p3").innerHTML="";
+        document.getElementById("p4").innerHTML="";
+        document.getElementById("p5").innerHTML="";
+        document.getElementById("p11").innerHTML="";
+        document.getElementById("p22").innerHTML="";
+        document.getElementById("p33").innerHTML="";
+        document.getElementById("p44").innerHTML="";
+        document.getElementById("p55").innerHTML="";
+        document.getElementById("p71").innerHTML="";
+        document.getElementById("p72").innerHTML="";
+        document.getElementById("p73").innerHTML="";
+        document.getElementById("p74").innerHTML="";
+        document.getElementById("p75").innerHTML="";
+        document.getElementById("p76").innerHTML="";
+    }
+    function drawBox(index){
+        var x = dataSet[pressureIndexSet].temperatures[index-1].xcord;
+        var y = dataSet[pressureIndexSet].temperatures[index-1].ycord;
+        // var canvas = document.getElementById("canvas");
+        // var ctx = canvas.getContext("2d");
+        var canvas = document.getElementById('simscreen');
+        var context = canvas.getContext('2d');
+        // context.clearRect(0,0,500,500);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var img = document.getElementById("image1");
+        context.drawImage(img, -380, -80);
+        clear();
+        document.getElementById("p71").innerHTML= `Pressure(P) = ${dataSet[pressureIndexSet].temperatures[index-1].v1} MPa`;
+        document.getElementById("p72").innerHTML= `Temperature(T) = ${dataSet[pressureIndexSet].temperatures[index-1].v2} °C`;
+        document.getElementById("p73").innerHTML= `Specific volume(v) = ${dataSet[pressureIndexSet].temperatures[index-1].v3} m<sup>3</sup>/kg`;
+        document.getElementById("p74").innerHTML= `Specific Internal Energy(u) = ${dataSet[pressureIndexSet].temperatures[index-1].v4} kJ/kg`;
+        document.getElementById("p75").innerHTML= `Specific Enthalpy(h) = ${dataSet[pressureIndexSet].temperatures[index-1].v5} kJ/kg`;
+        document.getElementById("p76").innerHTML= `Specific Entropy(s) = ${dataSet[pressureIndexSet].temperatures[index-1].v6} kJ/kg.K`;
+
+//rect 1
+        context.beginPath();
+        context.lineWidth = 3;
+        // ctx.strokeStyle = dataSet[pressureIndexSet].color;
+        context.strokeStyle = "green";
+        context.fillStyle = "yellow";
+        context.rect(x,y,375,-30);
+        context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        // ctx.fill();
+        // ctx.fillText('Pressure: '+dataSet[pressureIndexSet].pressure+', Temperature: '+dataSet[pressureIndexSet].temperatures[index-1].val+', x: '+x+', y: '+y, x,y-10);
+        context.stroke();
+        context.closePath();
+        // console.log(id);
+
+//rect2
+        context.beginPath();
+        context.lineWidth = 2;
+        // ctx.strokeStyle = dataSet[pressureIndexSet].color;
+        context.strokeStyle = "black";
+        context.fillStyle = "yellow";
+        context.rect(x,y-29,375,-20);
+        // context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        context.fill();
+        // context.fillText('Pressure: '+dataSet[pressureIndexSet].pressure+', Temperature: '+dataSet[pressureIndexSet].temperatures[index-1].val+', x: '+x+', y: '+y, x,y-20);
+        context.stroke();
+        context.closePath();
+//rect3
+        context.beginPath();
+        context.lineWidth = 2;
+        // ctx.strokeStyle = dataSet[pressureIndexSet].color;
+        context.strokeStyle = "black";
+        context.fillStyle = "yellow";
+        context.rect(x,y-54,375,-20);
+        // context.globalAlpha = 0.2;
+        context.fill();
+        context.globalAlpha = 1;
+        context.fill();
+        context.fillText('Pressure: '+dataSet[pressureIndexSet].pressure+', Temperature: '+dataSet[pressureIndexSet].temperatures[index-1].val+', x: '+x+', y: '+y, x,y-65);
+        context.stroke();
+        context.closePath();
+
+        displayTextAbove00(x,y-33);
+        displayTextAbove01(dataSet[pressureIndexSet].temperatures[index-1].val,x,y-60);
+
+    }
+
+    function displayTextAbove00(rectTop,textTop) {
+        context.fillStyle = "black";
+        context.font="15px ariel";
+        // Turn transparency on
+        context.fillText("v (m3/kg)", 115, textTop);
+        context.fillText("u (kJ/kg)", 215, textTop);
+        context.fillText("h (kJ/kg)", 310, textTop);
+        context.fillText("s (kJ/kg.K)", 405, textTop);
+        context.stroke();
+
+    }
+    function displayTextAbove01(temp,rectTop,textTop) {
+        context.fillStyle = "black";
+        context.font="15px ariel";
+        // Turn transparency on
+        context.fillText("T = "+temp+"°C", 270, textTop);
+        context.stroke();
+
+    }
+
+
+    $(document).ready(function(){
+        $('input[type="radio"]').click(function(){
+            var inputValue = $(this).attr("value");
+            var targetBox = $("." + inputValue);
+            $(".box").not(targetBox).hide();
+            $(targetBox).show();
+        });
+    });
+
+    $(document).ready(function(){
+        $('input[type="checkbox"]').click(function(){
+            var inputValue = $(this).attr("value");
+            var targetBox = $("." + inputValue);
+            $(".box").not(targetBox).hide();
+            $(targetBox).show();
+        });
+    });
+    function resetradio (checkbox) {
+        clear();
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var img = document.getElementById("image2");
+        context.drawImage(img, 0, 10);
+        document.getElementById("yes").checked=false;
+        document.getElementById("yes2").checked=false;
+        document.getElementById("ok").hidden=true;
+        document.getElementById("ok1").hidden=true;
+        document.getElementById("ok2").hidden=true;
+        document.getElementById("pressure").hidden=true;
+        document.getElementById("temperature").hidden=true;
+        document.getElementById("yes6").hidden=false;
+        document.getElementById("yes5").hidden=false;
+        document.getElementById("p71").hidden=true;
+        document.getElementById("p72").hidden=true;
+        document.getElementById("p73").hidden=true;
+        document.getElementById("p74").hidden=true;
+        document.getElementById("p75").hidden=true;
+        document.getElementById("p76").hidden=true;
+        document.getElementById("p1").hidden=false;
+        document.getElementById("p2").hidden=false;
+        document.getElementById("p3").hidden=false;
+        document.getElementById("p4").hidden=false;
+        document.getElementById("p5").hidden=false;
+        document.getElementById("p11").hidden=false;
+        document.getElementById("p22").hidden=false;
+        document.getElementById("p33").hidden=false;
+        document.getElementById("p44").hidden=false;
+        document.getElementById("p55").hidden=false;
+        var buttons = document.querySelector('.buttons');
+        var radios = document.getElementsByName('ad_pack_id');
+        radios[0] = true;
+        if (checkbox.checked == true) {
+            buttons.style.display = 'block';
+        }
+        else {
+            buttons.style.display = 'none';
+        }
+    }
+
+    function setcheckbox () {
+        clear();
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var img = document.getElementById("image2");
+        context.drawImage(img, 0, 10);
+        document.getElementById("select1").hidden=false;
+        document.getElementById("psat").hidden=false;
+        var checkbox = document.getElementsByName('featured_ad')[0];
+        if (checkbox.checked == false) {
+            checkbox.checked = true;
+        }
+        document.getElementById("psat").selectedIndex = 0;
+        document.getElementById("vsat").selectedIndex = 0;
+    }
+
+    function setcheckboxs () {
+        clear();
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var img = document.getElementById("image3");
+        context.drawImage(img, 0, 10);
+        document.getElementById("select1").hidden=false;
+        document.getElementById("psat").hidden=false;
+        var checkbox = document.getElementsByName('featured_ad')[0];
+        if (checkbox.checked == false) {
+            checkbox.checked = true;
+        }
+        document.getElementById("psat").selectedIndex = 0;
+        document.getElementById("vsat").selectedIndex = 0;
+    }
+
+
+    function resetradio1 (checkbox1) {
+        clear();
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var img = document.getElementById("image1");
+        context.drawImage(img, 0, 10);
+            //document.getElementById("yes").hidden=true;
+            document.getElementById("yes6").hidden=true;
+            document.getElementById("yes5").hidden=true;
+            document.getElementById("ok").hidden=false;
+            document.getElementById("ok1").hidden=false;
+            document.getElementById("ok2").hidden=false;
+            document.getElementById("pressure").hidden=false;
+            document.getElementById("temperature").hidden=false;
+            document.getElementById("p71").hidden=false;
+            document.getElementById("p72").hidden=false;
+            document.getElementById("p73").hidden=false;
+            document.getElementById("p74").hidden=false;
+            document.getElementById("p75").hidden=false;
+            document.getElementById("p76").hidden=false;
+            document.getElementById("p1").hidden=true;
+            document.getElementById("p2").hidden=true;
+            document.getElementById("p3").hidden=true;
+            document.getElementById("p4").hidden=true;
+            document.getElementById("p5").hidden=true;
+            document.getElementById("p11").hidden=true;
+            document.getElementById("p22").hidden=true;
+            document.getElementById("p33").hidden=true;
+            document.getElementById("p44").hidden=true;
+            document.getElementById("p55").hidden=true;
+        var buttons1 = document.querySelector('.buttons1');
+        var radios = document.getElementsByName('ad_pack_id1');
+        radios[0] = true;
+        if (checkbox1.checked == true) {
+            buttons1.style.display = 'block';
+        }
+        else {
+            buttons1.style.display = 'none';
+        }
+        pressureIndexSet = 0;
+        pressures = `<option value="">Select</option>`;
+
+        dataSet.forEach(function(ele,index){
+            pressures+=`<option value=${ele.id}>${ele.pressure}</option>`
+        })
+        document.getElementById("pressure").innerHTML = pressures;
+
+        document.getElementById("temperature").innerHTML = `<option value="">Select</option>`;
+
+    }
+
+
+    function setcheckbox1 () {
+        var checkbox1 = document.getElementsByName('featured_ad1')[0];
+        if (checkbox1.checked == false) {
+            checkbox1.checked = true;
+        }
+    }
+</script>
+</body>
+</html>
